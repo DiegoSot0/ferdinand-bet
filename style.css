@@ -1,0 +1,315 @@
+:root {
+  --verde-oscuro: #063f35;
+  --verde: #0e5a48;
+  --verde-claro: #dceee7;
+  --dorado: #d8b45f;
+  --crema: #f7f1dc;
+  --blanco: #ffffff;
+  --gris: #66736e;
+  --rojo: #cf4545;
+  --azul: #1f5d8f;
+  --amarillo: #fff1bd;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(180deg, var(--crema), #edf7f2);
+  color: var(--verde-oscuro);
+}
+
+.topbar {
+  background: linear-gradient(135deg, var(--verde-oscuro), var(--verde));
+  color: white;
+  border-bottom: 5px solid var(--dorado);
+  padding: 18px min(5vw, 48px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+}
+
+.brand { display: flex; align-items: center; gap: 16px; }
+
+.brand img {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 14px rgba(0,0,0,.3));
+}
+
+.brand span { color: var(--dorado); font-weight: bold; }
+
+.brand h1 {
+  margin: 4px 0 0;
+  font-size: clamp(26px, 4vw, 48px);
+}
+
+.brand p { margin: 3px 0 0; color: #dceee7; }
+
+.actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+button {
+  border: none;
+  border-radius: 12px;
+  padding: 11px 16px;
+  background: var(--dorado);
+  color: var(--verde-oscuro);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+button.outline {
+  background: transparent;
+  color: var(--crema);
+  border: 1px solid var(--dorado);
+}
+
+.container {
+  width: min(1200px, 94%);
+  margin: 26px auto;
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.kpis article {
+  background: white;
+  border: 1px solid rgba(6,63,53,.12);
+  border-bottom: 5px solid var(--dorado);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 12px 25px rgba(6,63,53,.10);
+}
+
+.kpis span { display: block; color: var(--gris); font-size: 14px; }
+.kpis strong { display: block; font-size: 28px; margin-top: 6px; }
+
+.panel {
+  background: rgba(255,255,255,.92);
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: 0 14px 32px rgba(6,63,53,.12);
+  margin-bottom: 22px;
+}
+
+.panel-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.panel-title h2 { margin: 0; }
+.panel-title p { margin: 4px 0 0; color: var(--gris); }
+
+input {
+  border: 1px solid rgba(6,63,53,.25);
+  border-radius: 12px;
+  padding: 12px;
+  outline: none;
+  width: 260px;
+}
+
+.matches {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
+  gap: 16px;
+}
+
+.match-card {
+  border: 1px solid rgba(6,63,53,.13);
+  border-radius: 18px;
+  overflow: hidden;
+  background: linear-gradient(180deg, white, #f4fbf7);
+}
+
+.match-head {
+  background: var(--verde-oscuro);
+  color: var(--crema);
+  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.match-body { padding: 16px; }
+
+.score-line {
+  display: grid;
+  grid-template-columns: 1fr 88px 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.team {
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.score-line .team:first-child { text-align: left; }
+.score-line .team:last-child { text-align: right; }
+
+.score-result,
+.score-pending {
+  width: 88px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  border: 1px solid var(--dorado);
+  border-radius: 14px;
+  background: var(--verde-claro);
+
+  font-weight: 900;
+  color: var(--verde-oscuro);
+}
+
+.score-result { font-size: 30px; }
+.score-result .dash { font-size: 20px; }
+.score-pending { font-size: 24px; }
+
+.status {
+  margin-top: 12px;
+  color: var(--gris);
+  font-size: 14px;
+}
+
+.table-wrap { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+th {
+  background: var(--verde-oscuro);
+  color: var(--crema);
+  text-align: left;
+  padding: 13px;
+  font-size: 14px;
+}
+
+td {
+  border-bottom: 1px solid #dbe6e1;
+  padding: 13px;
+}
+
+tbody tr:hover { background: #f2fbf7; }
+
+.pos { font-weight: 900; color: var(--dorado); }
+.puntos { font-size: 18px; font-weight: 900; color: var(--verde-oscuro); }
+
+.chip {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.exacto { background: #dff7df; color: #116b28; }
+.parcial { background: var(--amarillo); color: #7a5b00; }
+.resultado { background: #dfefff; color: var(--azul); }
+.fallado { background: #ffe1e1; color: var(--rojo); }
+.pendiente { background: #edf1f0; color: var(--gris); }
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 100;
+}
+
+.modal.show { display: flex; }
+
+.modal-content {
+  width: min(1120px, 96vw);
+  max-height: 88vh;
+  overflow: auto;
+  background: white;
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: 0 22px 50px rgba(0,0,0,.35);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #e5eee9;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+}
+
+.modal-header h2 { margin: 0; }
+
+.btn-close {
+  background: #eef5f1;
+  font-size: 24px;
+  line-height: 1;
+  padding: 6px 12px;
+}
+
+.detalle-resumen {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.detalle-resumen div {
+  background: var(--verde-claro);
+  border-radius: 14px;
+  padding: 13px;
+}
+
+.detalle-resumen span {
+  display: block;
+  color: var(--gris);
+  font-size: 12px;
+}
+
+.detalle-resumen strong { font-size: 22px; }
+
+@media (max-width: 860px) {
+  .topbar, .panel-title {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .kpis, .detalle-resumen {
+    grid-template-columns: 1fr;
+  }
+
+  input { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .score-line {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .score-line .team:first-child,
+  .score-line .team:last-child {
+    text-align: center;
+  }
+}

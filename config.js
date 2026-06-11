@@ -1,0 +1,1 @@
+window.FERDINAND_CONFIG = { liveUrl: "live-results.json" };
