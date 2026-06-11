@@ -99,8 +99,80 @@
       ]
     },
     {
+      "id": "morayma",
+      "nombre": "Morayma",
+      "apuestas": [
+        {
+          "partidoId": 1,
+          "goles1": 3,
+          "goles2": 1
+        },
+        {
+          "partidoId": 2,
+          "goles1": 2,
+          "goles2": 0
+        },
+        {
+          "partidoId": 3,
+          "goles1": 1,
+          "goles2": 1
+        },
+        {
+          "partidoId": 4,
+          "goles1": 0,
+          "goles2": 1
+        },
+        {
+          "partidoId": 5,
+          "goles1": 2,
+          "goles2": 1
+        },
+        {
+          "partidoId": 6,
+          "goles1": 1,
+          "goles2": 0
+        }
+      ]
+    },
+    {
       "id": "diego",
       "nombre": "Diego",
+      "apuestas": [
+        {
+          "partidoId": 1,
+          "goles1": 3,
+          "goles2": 1
+        },
+        {
+          "partidoId": 2,
+          "goles1": 2,
+          "goles2": 1
+        },
+        {
+          "partidoId": 3,
+          "goles1": 3,
+          "goles2": 0
+        },
+        {
+          "partidoId": 4,
+          "goles1": 2,
+          "goles2": 1
+        },
+        {
+          "partidoId": 5,
+          "goles1": 3,
+          "goles2": 1
+        },
+        {
+          "partidoId": 6,
+          "goles1": 0,
+          "goles2": 3
+        }
+      ]
+    },
+    {
+      "id": "elvis",
+      "nombre": "Elvis",
       "apuestas": [
         {
           "partidoId": 1,
@@ -109,7 +181,7 @@
         },
         {
           "partidoId": 2,
-          "goles1": 0,
+          "goles1": 1,
           "goles2": 1
         },
         {
@@ -120,7 +192,43 @@
         {
           "partidoId": 4,
           "goles1": 1,
+          "goles2": 1
+        },
+        {
+          "partidoId": 5,
+          "goles1": 2,
+          "goles2": 1
+        },
+        {
+          "partidoId": 6,
+          "goles1": 1,
+          "goles2": 2
+        }
+      ]
+    },
+    {
+      "id": "esmeralda",
+      "nombre": "Esmeralda",
+      "apuestas": [
+        {
+          "partidoId": 1,
+          "goles1": 2,
+          "goles2": 1
+        },
+        {
+          "partidoId": 2,
+          "goles1": 1,
+          "goles2": 1
+        },
+        {
+          "partidoId": 3,
+          "goles1": 1,
           "goles2": 0
+        },
+        {
+          "partidoId": 4,
+          "goles1": 1,
+          "goles2": 1
         },
         {
           "partidoId": 5,
@@ -129,8 +237,8 @@
         },
         {
           "partidoId": 6,
-          "goles1": 2,
-          "goles2": 2
+          "goles1": 0,
+          "goles2": 1
         }
       ]
     },
@@ -140,280 +248,28 @@
       "apuestas": [
         {
           "partidoId": 1,
-          "goles1": 1,
-          "goles2": 0
-        },
-        {
-          "partidoId": 2,
-          "goles1": 2,
-          "goles2": 1
-        },
-        {
-          "partidoId": 3,
-          "goles1": 1,
-          "goles2": 2
-        },
-        {
-          "partidoId": 4,
-          "goles1": 2,
-          "goles2": 0
-        },
-        {
-          "partidoId": 5,
-          "goles1": 2,
-          "goles2": 0
-        },
-        {
-          "partidoId": 6,
-          "goles1": 1,
-          "goles2": 1
-        }
-      ]
-    },
-    {
-      "id": "lucia",
-      "nombre": "Lucía",
-      "apuestas": [
-        {
-          "partidoId": 1,
-          "goles1": 3,
-          "goles2": 0
-        },
-        {
-          "partidoId": 2,
-          "goles1": 1,
-          "goles2": 2
-        },
-        {
-          "partidoId": 3,
-          "goles1": 0,
-          "goles2": 1
-        },
-        {
-          "partidoId": 4,
-          "goles1": 1,
-          "goles2": 1
-        },
-        {
-          "partidoId": 5,
-          "goles1": 2,
-          "goles2": 2
-        },
-        {
-          "partidoId": 6,
-          "goles1": 0,
-          "goles2": 2
-        }
-      ]
-    },
-    {
-      "id": "fernando",
-      "nombre": "Fernando",
-      "apuestas": [
-        {
-          "partidoId": 1,
-          "goles1": 2,
-          "goles2": 0
-        },
-        {
-          "partidoId": 2,
-          "goles1": 0,
-          "goles2": 0
-        },
-        {
-          "partidoId": 3,
-          "goles1": 2,
-          "goles2": 1
-        },
-        {
-          "partidoId": 4,
-          "goles1": 3,
-          "goles2": 1
-        },
-        {
-          "partidoId": 5,
-          "goles1": 1,
-          "goles2": 0
-        },
-        {
-          "partidoId": 6,
-          "goles1": 2,
-          "goles2": 3
-        }
-      ]
-    },
-    {
-      "id": "valeria",
-      "nombre": "Valeria",
-      "apuestas": [
-        {
-          "partidoId": 1,
-          "goles1": 1,
-          "goles2": 0
-        },
-        {
-          "partidoId": 2,
-          "goles1": 1,
-          "goles2": 1
-        },
-        {
-          "partidoId": 3,
-          "goles1": 0,
-          "goles2": 0
-        },
-        {
-          "partidoId": 4,
-          "goles1": 2,
-          "goles2": 1
-        },
-        {
-          "partidoId": 5,
-          "goles1": 3,
-          "goles2": 2
-        },
-        {
-          "partidoId": 6,
-          "goles1": 1,
-          "goles2": 2
-        }
-      ]
-    },
-    {
-      "id": "jose",
-      "nombre": "José",
-      "apuestas": [
-        {
-          "partidoId": 1,
-          "goles1": 2,
-          "goles2": 0
-        },
-        {
-          "partidoId": 2,
-          "goles1": 1,
-          "goles2": 0
-        },
-        {
-          "partidoId": 3,
-          "goles1": 2,
-          "goles2": 2
-        },
-        {
-          "partidoId": 4,
-          "goles1": 0,
-          "goles2": 1
-        },
-        {
-          "partidoId": 5,
-          "goles1": 2,
-          "goles2": 1
-        },
-        {
-          "partidoId": 6,
-          "goles1": 1,
-          "goles2": 0
-        }
-      ]
-    },
-    {
-      "id": "andrea",
-      "nombre": "Andrea",
-      "apuestas": [
-        {
-          "partidoId": 1,
           "goles1": 2,
           "goles2": 1
         },
         {
           "partidoId": 2,
-          "goles1": 2,
+          "goles1": 0,
           "goles2": 2
         },
         {
           "partidoId": 3,
           "goles1": 1,
-          "goles2": 0
-        },
-        {
-          "partidoId": 4,
-          "goles1": 1,
-          "goles2": 2
-        },
-        {
-          "partidoId": 5,
-          "goles1": 3,
-          "goles2": 0
-        },
-        {
-          "partidoId": 6,
-          "goles1": 0,
           "goles2": 1
-        }
-      ]
-    },
-    {
-      "id": "raul",
-      "nombre": "Raúl",
-      "apuestas": [
-        {
-          "partidoId": 1,
-          "goles1": 0,
-          "goles2": 0
-        },
-        {
-          "partidoId": 2,
-          "goles1": 1,
-          "goles2": 1
-        },
-        {
-          "partidoId": 3,
-          "goles1": 0,
-          "goles2": 2
         },
         {
           "partidoId": 4,
           "goles1": 2,
-          "goles2": 0
-        },
-        {
-          "partidoId": 5,
-          "goles1": 1,
-          "goles2": 1
-        },
-        {
-          "partidoId": 6,
-          "goles1": 2,
-          "goles2": 1
-        }
-      ]
-    },
-    {
-      "id": "pamela",
-      "nombre": "Pamela",
-      "apuestas": [
-        {
-          "partidoId": 1,
-          "goles1": 3,
-          "goles2": 0
-        },
-        {
-          "partidoId": 2,
-          "goles1": 0,
-          "goles2": 0
-        },
-        {
-          "partidoId": 3,
-          "goles1": 1,
           "goles2": 2
         },
         {
-          "partidoId": 4,
-          "goles1": 1,
-          "goles2": 1
-        },
-        {
           "partidoId": 5,
           "goles1": 2,
-          "goles2": 0
+          "goles2": 1
         },
         {
           "partidoId": 6,
@@ -423,8 +279,8 @@
       ]
     },
     {
-      "id": "miguel",
-      "nombre": "Miguel",
+      "id": "andres",
+      "nombre": "Andrés",
       "apuestas": [
         {
           "partidoId": 1,
@@ -433,28 +289,208 @@
         },
         {
           "partidoId": 2,
-          "goles1": 2,
+          "goles1": 1,
           "goles2": 1
         },
         {
           "partidoId": 3,
-          "goles1": 0,
+          "goles1": 2,
           "goles2": 1
         },
         {
           "partidoId": 4,
-          "goles1": 3,
-          "goles2": 2
+          "goles1": 2,
+          "goles2": 1
         },
         {
           "partidoId": 5,
-          "goles1": 4,
+          "goles1": 2,
           "goles2": 1
         },
         {
           "partidoId": 6,
           "goles1": 0,
+          "goles2": 1
+        }
+      ]
+    },
+    {
+      "id": "jheyson",
+      "nombre": "Jheyson",
+      "apuestas": [
+        {
+          "partidoId": 1,
+          "goles1": 2,
           "goles2": 0
+        },
+        {
+          "partidoId": 2,
+          "goles1": 1,
+          "goles2": 0
+        },
+        {
+          "partidoId": 3,
+          "goles1": 1,
+          "goles2": 0
+        },
+        {
+          "partidoId": 4,
+          "goles1": 2,
+          "goles2": 1
+        },
+        {
+          "partidoId": 5,
+          "goles1": 2,
+          "goles2": 0
+        },
+        {
+          "partidoId": 6,
+          "goles1": 1,
+          "goles2": 2
+        }
+      ]
+    },
+    {
+      "id": "harry",
+      "nombre": "Harry",
+      "apuestas": [
+        {
+          "partidoId": 1,
+          "goles1": 2,
+          "goles2": 0
+        },
+        {
+          "partidoId": 2,
+          "goles1": 1,
+          "goles2": 1
+        },
+        {
+          "partidoId": 3,
+          "goles1": 2,
+          "goles2": 0
+        },
+        {
+          "partidoId": 4,
+          "goles1": 1,
+          "goles2": 0
+        },
+        {
+          "partidoId": 5,
+          "goles1": 3,
+          "goles2": 2
+        },
+        {
+          "partidoId": 6,
+          "goles1": 0,
+          "goles2": 1
+        }
+      ]
+    },
+    {
+      "id": "paul",
+      "nombre": "Paul",
+      "apuestas": [
+        {
+          "partidoId": 1,
+          "goles1": 2,
+          "goles2": 0
+        },
+        {
+          "partidoId": 2,
+          "goles1": 0,
+          "goles2": 0
+        },
+        {
+          "partidoId": 3,
+          "goles1": 2,
+          "goles2": 0
+        },
+        {
+          "partidoId": 4,
+          "goles1": 2,
+          "goles2": 1
+        },
+        {
+          "partidoId": 5,
+          "goles1": 2,
+          "goles2": 0
+        },
+        {
+          "partidoId": 6,
+          "goles1": 0,
+          "goles2": 1
+        }
+      ]
+    },
+    {
+      "id": "adrian",
+      "nombre": "Adrian",
+      "apuestas": [
+        {
+          "partidoId": 1,
+          "goles1": 2,
+          "goles2": 0
+        },
+        {
+          "partidoId": 2,
+          "goles1": 1,
+          "goles2": 1
+        },
+        {
+          "partidoId": 3,
+          "goles1": 2,
+          "goles2": 1
+        },
+        {
+          "partidoId": 4,
+          "goles1": 2,
+          "goles2": 0
+        },
+        {
+          "partidoId": 5,
+          "goles1": 2,
+          "goles2": 1
+        },
+        {
+          "partidoId": 6,
+          "goles1": 1,
+          "goles2": 1
+        }
+      ]
+    },
+    {
+      "id": "juliet",
+      "nombre": "Juliet",
+      "apuestas": [
+        {
+          "partidoId": 1,
+          "goles1": 2,
+          "goles2": 0
+        },
+        {
+          "partidoId": 2,
+          "goles1": 1,
+          "goles2": 1
+        },
+        {
+          "partidoId": 3,
+          "goles1": 2,
+          "goles2": 1
+        },
+        {
+          "partidoId": 4,
+          "goles1": 2,
+          "goles2": 0
+        },
+        {
+          "partidoId": 5,
+          "goles1": 2,
+          "goles2": 1
+        },
+        {
+          "partidoId": 6,
+          "goles1": 1,
+          "goles2": 1
         }
       ]
     }
