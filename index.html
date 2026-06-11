@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ferdinand Bet | Polla Mundialista</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <header class="topbar">
     <div class="brand">
@@ -24,6 +26,23 @@
   </header>
 
   <main class="container">
+    <section class="rules-panel">
+      <div class="rule-card">
+        <h2>Sistema de puntaje</h2>
+        <p><b>4 puntos:</b> Por acertar el marcador exacto del partido.</p>
+        <p><b>3 puntos:</b> Si aciertas el equipo ganador y la cantidad de goles de uno de los equipos, pero no el
+          marcador exacto.</p>
+        <p><b>2 puntos:</b> Si aciertas únicamente el resultado del partido, pero no el marcador exacto.</p>
+      </div>
+
+      <div class="rule-card">
+        <h2>Importante</h2>
+        <p>Se podrá participar solo hasta antes del inicio del primer partido.</p>
+        <p>Ganará la polla quien obtenga el mayor puntaje acumulado.</p>
+        <p>Si hay empate, se compartirá el premio entre los participantes que obtuvieron el máximo puntaje.</p>
+        <p>Si se suspende un partido, no se asignarán puntos por dicho encuentro.</p>
+      </div>
+    </section>
     <section class="kpis">
       <article><span>Participantes</span><strong id="kpiParticipantes">0</strong></article>
       <article><span>Puntos totales</span><strong id="kpiPuntos">0</strong></article>
@@ -100,4 +119,5 @@
   <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
+
 </html>
