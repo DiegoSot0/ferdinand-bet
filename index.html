@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,66 +24,68 @@
     </div>
   </header>
 
-  <main class="container">
-    <section class="rules-panel">
+  <main class="layout">
+    <section class="content">
+      <section class="kpis">
+        <article><span>Participantes</span><strong id="kpiParticipantes">0</strong></article>
+        <article><span>Puntos totales</span><strong id="kpiPuntos">0</strong></article>
+        <article><span>Líder actual</span><strong id="kpiLider">-</strong></article>
+        <article><span>Fuente resultados</span><strong id="kpiFuente">JSON</strong></article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">
+          <div>
+            <h2>Partidos / Resultados</h2>
+            <p id="estadoLive">Datos cargados desde <b>data.json</b>.</p>
+          </div>
+        </div>
+        <div id="partidosGrid" class="matches"></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">
+          <h2>Ranking general</h2>
+          <input id="buscar" type="search" placeholder="Buscar participante..." oninput="renderParticipantes()" />
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Pos.</th>
+                <th>Participante</th>
+                <th>Partidos</th>
+                <th>Exactos</th>
+                <th>Ganador + gol</th>
+                <th>Resultado</th>
+                <th>Fallados</th>
+                <th>Puntos</th>
+                <th>Detalle</th>
+              </tr>
+            </thead>
+            <tbody id="tablaParticipantes"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <aside class="sidebar-rules">
       <div class="rule-card">
         <h2>Sistema de puntaje</h2>
-        <p><b>4 puntos:</b> Por acertar el marcador exacto del partido.</p>
-        <p><b>3 puntos:</b> Si aciertas el equipo ganador y la cantidad de goles de uno de los equipos, pero no el
-          marcador exacto.</p>
-        <p><b>2 puntos:</b> Si aciertas únicamente el resultado del partido, pero no el marcador exacto.</p>
+        <p><b>4 puntos:</b> marcador exacto.</p>
+        <p><b>3 puntos:</b> ganador + goles de uno de los equipos.</p>
+        <p><b>2 puntos:</b> solo resultado correcto.</p>
       </div>
 
       <div class="rule-card">
         <h2>Importante</h2>
-        <p>Se podrá participar solo hasta antes del inicio del primer partido.</p>
-        <p>Ganará la polla quien obtenga el mayor puntaje acumulado.</p>
-        <p>Si hay empate, se compartirá el premio entre los participantes que obtuvieron el máximo puntaje.</p>
-        <p>Si se suspende un partido, no se asignarán puntos por dicho encuentro.</p>
+        <p>Solo se participa antes del primer partido.</p>
+        <p>Gana quien tenga mayor puntaje acumulado.</p>
+        <p>Si hay empate, se comparte el premio.</p>
+        <p>Partido suspendido no suma puntos.</p>
       </div>
-    </section>
-    <section class="kpis">
-      <article><span>Participantes</span><strong id="kpiParticipantes">0</strong></article>
-      <article><span>Puntos totales</span><strong id="kpiPuntos">0</strong></article>
-      <article><span>Líder actual</span><strong id="kpiLider">-</strong></article>
-      <article><span>Fuente resultados</span><strong id="kpiFuente">JSON</strong></article>
-    </section>
-
-    <section class="panel">
-      <div class="panel-title">
-        <div>
-          <h2>Partidos / Resultados</h2>
-          <p id="estadoLive">Datos cargados desde <b>data.json</b>.</p>
-        </div>
-      </div>
-      <div id="partidosGrid" class="matches"></div>
-    </section>
-
-    <section class="panel">
-      <div class="panel-title">
-        <h2>Ranking general</h2>
-        <input id="buscar" type="search" placeholder="Buscar participante..." oninput="renderParticipantes()" />
-      </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Pos.</th>
-              <th>Participante</th>
-              <th>Partidos</th>
-              <th>Exactos</th>
-              <th>Ganador + gol</th>
-              <th>Resultado</th>
-              <th>Fallados</th>
-              <th>Puntos</th>
-              <th>Detalle</th>
-            </tr>
-          </thead>
-          <tbody id="tablaParticipantes"></tbody>
-        </table>
-      </div>
-    </section>
+    </aside>
   </main>
 
   <div class="modal" id="modalDetalle">
@@ -119,5 +120,4 @@
   <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
-
 </html>
