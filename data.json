@@ -279,42 +279,6 @@
       ]
     },
     {
-      "id": "andres",
-      "nombre": "Andrés",
-      "apuestas": [
-        {
-          "partidoId": 1,
-          "goles1": 2,
-          "goles2": 0
-        },
-        {
-          "partidoId": 2,
-          "goles1": 1,
-          "goles2": 1
-        },
-        {
-          "partidoId": 3,
-          "goles1": 2,
-          "goles2": 1
-        },
-        {
-          "partidoId": 4,
-          "goles1": 2,
-          "goles2": 1
-        },
-        {
-          "partidoId": 5,
-          "goles1": 2,
-          "goles2": 1
-        },
-        {
-          "partidoId": 6,
-          "goles1": 0,
-          "goles2": 1
-        }
-      ]
-    },
-    {
       "id": "jheyson",
       "nombre": "Jheyson",
       "apuestas": [
@@ -347,6 +311,42 @@
           "partidoId": 6,
           "goles1": 1,
           "goles2": 2
+        }
+      ]
+    },
+    {
+      "id": "andres",
+      "nombre": "Andrés",
+      "apuestas": [
+        {
+          "partidoId": 1,
+          "goles1": 2,
+          "goles2": 0
+        },
+        {
+          "partidoId": 2,
+          "goles1": 1,
+          "goles2": 1
+        },
+        {
+          "partidoId": 3,
+          "goles1": 2,
+          "goles2": 1
+        },
+        {
+          "partidoId": 4,
+          "goles1": 2,
+          "goles2": 1
+        },
+        {
+          "partidoId": 5,
+          "goles1": 2,
+          "goles2": 1
+        },
+        {
+          "partidoId": 6,
+          "goles1": 0,
+          "goles2": 1
         }
       ]
     },
