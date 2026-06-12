@@ -252,13 +252,14 @@ function renderParticipantes() {
             : a.estado === "Pendiente" ? "pendiente"
               : "fallado";
 
-      return `
-        <td data-label="P${a.partidoId}">
-          <span class="mini-point ${clase} ${esVivo ? "mini-live" : ""}">
-            ${a.estado === "Pendiente" ? "-" : a.puntos}
-          </span>
-        </td>
-      `;
+     return `
+      <td class="td-partido">
+        <span class="mini-point ${clase} ${esVivo ? "mini-live" : ""}">
+          ${a.estado === "Pendiente" ? "-" : a.puntos}
+        </span>
+        <small class="apuesta-mini">${a.goles1} - ${a.goles2}</small>
+      </td>
+    `;
     }).join("");
 
     return `
