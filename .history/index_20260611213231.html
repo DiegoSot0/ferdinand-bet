@@ -2,17 +2,10 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ferdinand Bet | Polla Mundialista</title>
-
-  <link rel="icon" href="assets/logo-ferdinand-bet.png" type="image/png">
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
-
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
@@ -22,15 +15,13 @@
       <div>
         <span>Copa Mundial FIFA 2026</span>
         <h1>Polla Mundialista</h1>
-        <p>Pronósticos y puntajes del grupo</p>
+        <p>Ranking, apuestas y resultados en vivo</p>
       </div>
     </div>
 
     <div class="actions">
-      <button onclick="cargarSheets()">
-        <i class="bi bi-arrow-clockwise me-1"></i>
-        Actualizar Sheets
-      </button>
+      <button onclick="recargarJSON()">Recargar JSON</button>
+      <button class="outline" onclick="cargarLive()">Actualizar live</button>
     </div>
   </header>
 
@@ -38,22 +29,18 @@
     <section class="content">
       <section class="kpis">
         <article><span>Participantes</span><strong id="kpiParticipantes">0</strong></article>
-        <article>
-          <span>Puntaje máximo</span>
-          <strong id="kpiPuntajeMaximo">-</strong>
-        </article>
+        <article><span>Puntos totales</span><strong id="kpiPuntos">0</strong></article>
         <article><span>Líder actual</span><strong id="kpiLider">-</strong></article>
-        <article><span>Fuente resultados</span><strong id="kpiFuente">SHEETS</strong></article>
+        <article><span>Fuente resultados</span><strong id="kpiFuente">JSON</strong></article>
       </section>
 
       <section class="panel">
         <div class="panel-title">
           <div>
             <h2>Partidos / Resultados</h2>
-            <p id="estadoLive">Datos cargados desde <b>Google Sheets</b>.</p>
+            <p id="estadoLive">Datos cargados desde <b>data.json</b>.</p>
           </div>
         </div>
-
         <div id="partidosGrid" class="matches"></div>
       </section>
 
@@ -63,11 +50,6 @@
           <input id="buscar" type="search" placeholder="Buscar participante..." oninput="renderParticipantes()" />
         </div>
 
-        <div class="ranking-info">
-          <div id="liveMatchInfo" class="live-match-info"></div>
-          <div id="lastUpdateInfo" class="last-update-info"></div>
-        </div>
-
         <div class="table-wrap">
           <table>
             <thead>
@@ -75,6 +57,7 @@
                 <th>Pos.</th>
                 <th>Participante</th>
                 <th>Puntos</th>
+                <th>En vivo</th>
                 <th>P1</th>
                 <th>P2</th>
                 <th>P3</th>
@@ -84,7 +67,6 @@
                 <th>Detalle</th>
               </tr>
             </thead>
-
             <tbody id="tablaParticipantes"></tbody>
           </table>
         </div>
@@ -132,7 +114,6 @@
               <th>Puntos</th>
             </tr>
           </thead>
-
           <tbody id="tablaApuestas"></tbody>
         </table>
       </div>
@@ -141,7 +122,6 @@
 
   <script src="config.js"></script>
   <script src="app.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

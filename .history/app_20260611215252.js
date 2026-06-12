@@ -2,7 +2,14 @@ let participantes = [];
 let partidos = [];
 
 async function leerCSV(url) {
-  const res = await fetch(url + "&v=" + Date.now());
+  const proxyUrl = "https://api.allorigins.win/raw?url=" + encodeURIComponent(url + "&v=" + Date.now());
+
+  const res = await fetch(proxyUrl);
+
+  if (!res.ok) {
+    throw new Error("No se pudo leer CSV");
+  }
+
   const texto = await res.text();
   return csvToObjects(texto);
 }
@@ -287,8 +294,7 @@ function pintarKpis(lista) {
   const totalPuntos = lista.reduce((s, p) => s + p.resumen.puntos, 0);
 
   document.getElementById("kpiParticipantes").textContent = lista.length;
-  document.getElementById("kpiPuntajeMaximo").textContent =
-    lista.length ? `${lista[0].resumen.puntos} pts` : "-";
+  document.getElementById("kpiPuntos").textContent = totalPuntos;
   document.getElementById("kpiLider").textContent = lista[0]?.nombre ?? "-";
 }
 

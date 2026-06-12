@@ -8,9 +8,10 @@
     },
     {
       "id": 2,
-      "real1": 0,
-      "real2": 0,
-      "estado": "En vivo"
+      "real1": 1,
+      "real2": 1,
+      "estado": "En vivo",
+      "minuto": "67'"
     },
     {
       "id": 3,

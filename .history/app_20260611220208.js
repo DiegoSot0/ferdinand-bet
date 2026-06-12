@@ -288,8 +288,7 @@ function pintarKpis(lista) {
 
   document.getElementById("kpiParticipantes").textContent = lista.length;
   document.getElementById("kpiPuntajeMaximo").textContent =
-    lista.length ? `${lista[0].resumen.puntos} pts` : "-";
-  document.getElementById("kpiLider").textContent = lista[0]?.nombre ?? "-";
+    lista.length ? `${lista[0].resumen.puntos} pts` : "-"; document.getElementById("kpiLider").textContent = lista[0]?.nombre ?? "-";
 }
 
 function verDetalle(id) {

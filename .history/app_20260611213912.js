@@ -71,50 +71,13 @@ async function cargarSheets() {
 
     renderPartidos();
     renderParticipantes();
-    renderLiveInfo();
-    renderLastUpdate();
+
   } catch (error) {
     console.error(error);
     alert("No se pudo leer Google Sheets. Revisa que las hojas estén publicadas como CSV.");
   }
 }
-function renderLiveInfo() {
-  const live = partidos.find(p =>
-    (p.estado || "").toLowerCase().includes("vivo")
-  );
 
-  const contenedor = document.getElementById("liveMatchInfo");
-
-  if (!live) {
-    contenedor.innerHTML = `<span class="badge bg-secondary">Sin partido en vivo</span>`;
-    return;
-  }
-
-  contenedor.innerHTML = `
-    <span class="badge bg-danger live-global-badge">
-      ● EN VIVO
-    </span>
-    <strong>${live.equipo1}</strong>
-    <span>${live.real1 ?? 0} - ${live.real2 ?? 0}</span>
-    <strong>${live.equipo2}</strong>
-  `;
-}
-
-function renderLastUpdate() {
-  const ahora = new Date();
-
-  const fecha = ahora.toLocaleString("es-PE", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-
-  document.getElementById("lastUpdateInfo").innerHTML = `
-    Actualizado desde Google Sheets: <b>${fecha}</b>
-  `;
-}
 function normalizarId(texto) {
   return texto
     .toLowerCase()
@@ -253,7 +216,7 @@ function renderParticipantes() {
               : "fallado";
 
       return `
-        <td data-label="P${a.partidoId}">
+        <td>
           <span class="mini-point ${clase} ${esVivo ? "mini-live" : ""}">
             ${a.estado === "Pendiente" ? "-" : a.puntos}
           </span>
@@ -261,21 +224,21 @@ function renderParticipantes() {
       `;
     }).join("");
 
+    const tieneVivo = p.apuestas.some(a => {
+      const partido = partidos.find(x => x.id === a.partidoId);
+      return (partido?.estado || "").toLowerCase().includes("vivo");
+    });
+
     return `
       <tr>
-        <td data-label="Pos." class="pos">#${index + 1}</td>
-
-        <td data-label="Participante">
-          <b>${p.nombre}</b>
-        </td>
-
-        <td data-label="Puntos" class="puntos">${p.resumen.puntos}</td>
-
-        ${puntosPorPartido}
-
-        <td data-label="Detalle">
-          <button class="btn-ver" onclick="verDetalle('${p.id}')">Ver</button>
-        </td>
+        <td class="pos">#${index + 1}</td>
+     <td>
+      <b>${p.nombre}</b>
+      ${tieneVivo ? `<span class="badge bg-danger ms-2">● EN VIVO</span>` : ""}
+      </td>
+      <td class="puntos">${p.resumen.puntos}</td>
+      ${puntosPorPartido}
+        <td><button onclick="verDetalle('${p.id}')">Ver</button></td>
       </tr>
     `;
   }).join("");
@@ -287,8 +250,7 @@ function pintarKpis(lista) {
   const totalPuntos = lista.reduce((s, p) => s + p.resumen.puntos, 0);
 
   document.getElementById("kpiParticipantes").textContent = lista.length;
-  document.getElementById("kpiPuntajeMaximo").textContent =
-    lista.length ? `${lista[0].resumen.puntos} pts` : "-";
+  document.getElementById("kpiPuntos").textContent = totalPuntos;
   document.getElementById("kpiLider").textContent = lista[0]?.nombre ?? "-";
 }
 

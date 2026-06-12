@@ -10,7 +10,8 @@
       "id": 2,
       "real1": 0,
       "real2": 0,
-      "estado": "En vivo"
+      "estado": "En vivo",
+      "minuto": "8"
     },
     {
       "id": 3,
