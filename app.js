@@ -1,8 +1,15 @@
 let participantes = [];
+let participantesBase = [];
 let partidos = [];
+let partidosTodos = [];
+let jornadaSeleccionada = "2";
 
 async function leerCSV(url) {
-  const res = await fetch(url + "&v=" + Date.now());
+  const sep = url.includes("?") ? "&" : "?";
+  const res = await fetch(url + sep + "v=" + Date.now());
+
+  if (!res.ok) throw new Error("No se pudo leer CSV");
+
   const texto = await res.text();
   return csvToObjects(texto);
 }
@@ -21,14 +28,21 @@ function csvToObjects(csv) {
 }
 
 async function recargarJSON() {
-  await cargarSheets();
+  await cargarSheets(true);
 }
 
 async function cargarLive() {
-  await cargarSheets();
+  await cargarSheets(true);
 }
 
-async function cargarSheets() {
+async function cargarSheets(manual = false) {
+  const btn = document.getElementById("btnActualizar");
+
+  if (manual && btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>Actualizando...`;
+  }
+
   try {
     const cfg = window.FERDINAND_CONFIG;
 
@@ -36,7 +50,8 @@ async function cargarSheets() {
     const participantesSheet = await leerCSV(cfg.participantesCsv);
     const apuestasSheet = await leerCSV(cfg.apuestasCsv);
 
-    partidos = resultados.map(r => ({
+    partidosTodos = resultados.map(r => ({
+      jornada: r.Jornada || "1",
       id: Number(r.id),
       fecha: r.Fecha,
       hora: r.Hora,
@@ -47,24 +62,30 @@ async function cargarSheets() {
       estado: r.Estado || "Pendiente"
     }));
 
-    participantes = participantesSheet.map(p => {
+    participantesBase = participantesSheet.map(p => {
       const filaApuesta = apuestasSheet.find(a => a.Participante === p.Nombre);
 
       return {
         id: normalizarId(p.Nombre),
         nombre: p.Nombre,
-        apuestas: partidos.map(partido => {
-          const l = Number(filaApuesta?.[`P${partido.id}_L`] ?? 0);
-          const v = Number(filaApuesta?.[`P${partido.id}_V`] ?? 0);
+        apuestasTodas: partidosTodos.map(partido => {
+          const valL = filaApuesta?.[`P${partido.id}_L`];
+          const valV = filaApuesta?.[`P${partido.id}_V`];
 
-          return calcularApuesta({
+          const l = valL === "" || valL === undefined ? null : Number(valL);
+          const v = valV === "" || valV === undefined ? null : Number(valV);
+
+          return {
             partidoId: partido.id,
             goles1: l,
             goles2: v
-          });
+          };
         })
       };
     });
+
+    renderSelectorJornadas();
+    aplicarFiltroJornada();
 
     document.getElementById("kpiFuente").textContent = "SHEETS";
     document.getElementById("estadoLive").innerHTML = `Datos cargados desde <b>Google Sheets</b>.`;
@@ -73,11 +94,83 @@ async function cargarSheets() {
     renderParticipantes();
     renderLiveInfo();
     renderLastUpdate();
+    verificarGanadores();
+
+    if (manual && btn) {
+      btn.disabled = false;
+      btn.innerHTML = `<i class="bi bi-check-circle-fill me-2"></i>Actualizado`;
+
+      setTimeout(() => {
+        btn.innerHTML = `<i class="bi bi-arrow-clockwise me-1"></i>Actualizar Sheets`;
+      }, 1500);
+    }
+
   } catch (error) {
     console.error(error);
+
+    if (manual && btn) {
+      btn.disabled = false;
+      btn.innerHTML = `<i class="bi bi-exclamation-circle me-2"></i>Error`;
+
+      setTimeout(() => {
+        btn.innerHTML = `<i class="bi bi-arrow-clockwise me-1"></i>Actualizar Sheets`;
+      }, 2000);
+    }
+
     alert("No se pudo leer Google Sheets. Revisa que las hojas estén publicadas como CSV.");
   }
 }
+
+function renderSelectorJornadas() {
+  const select = document.getElementById("selectJornada");
+  if (!select) return;
+
+  const jornadas = [...new Set(partidosTodos.map(p => p.jornada))]
+    .sort((a, b) => Number(a) - Number(b));
+
+  select.innerHTML = `
+    <option value="general">General acumulado</option>
+    ${jornadas.map(j => `<option value="${j}">Fecha ${j}</option>`).join("")}
+  `;
+
+  if (jornadaSeleccionada !== "general" && !jornadas.includes(jornadaSeleccionada)) {
+    jornadaSeleccionada = jornadas.includes("2") ? "2" : "general";
+  }
+
+  select.value = jornadaSeleccionada;
+}
+
+function aplicarFiltroJornada() {
+  partidos = jornadaSeleccionada === "general"
+    ? [...partidosTodos]
+    : partidosTodos.filter(p => p.jornada === jornadaSeleccionada);
+
+  participantes = participantesBase.map(p => ({
+    id: p.id,
+    nombre: p.nombre,
+    apuestas: partidos.map(partido => {
+      const apuesta = p.apuestasTodas.find(a => a.partidoId === partido.id);
+
+      return calcularApuesta({
+        partidoId: partido.id,
+        goles1: apuesta?.goles1 ?? null,
+        goles2: apuesta?.goles2 ?? null
+      });
+    })
+  }));
+}
+
+function cambiarJornada() {
+  jornadaSeleccionada = document.getElementById("selectJornada").value;
+
+  aplicarFiltroJornada();
+  renderPartidos();
+  renderParticipantes();
+  renderLiveInfo();
+  renderLastUpdate();
+  verificarGanadores();
+}
+
 function renderLiveInfo() {
   const live = partidos.find(p =>
     (p.estado || "").toLowerCase().includes("vivo")
@@ -91,9 +184,7 @@ function renderLiveInfo() {
   }
 
   contenedor.innerHTML = `
-    <span class="badge bg-danger live-global-badge">
-      ● EN VIVO
-    </span>
+    <span class="badge bg-danger live-global-badge">● EN VIVO</span>
     <strong>${live.equipo1}</strong>
     <span>${live.real1 ?? 0} - ${live.real2 ?? 0}</span>
     <strong>${live.equipo2}</strong>
@@ -101,9 +192,7 @@ function renderLiveInfo() {
 }
 
 function renderLastUpdate() {
-  const ahora = new Date();
-
-  const fecha = ahora.toLocaleString("es-PE", {
+  const fecha = new Date().toLocaleString("es-PE", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -111,10 +200,10 @@ function renderLastUpdate() {
     minute: "2-digit"
   });
 
-  document.getElementById("lastUpdateInfo").innerHTML = `
-    Actualizado desde Google Sheets: <b>${fecha}</b>
-  `;
+  document.getElementById("lastUpdateInfo").innerHTML =
+    `Actualizado desde Google Sheets: <b>${fecha}</b>`;
 }
+
 function normalizarId(texto) {
   return texto
     .toLowerCase()
@@ -123,8 +212,53 @@ function normalizarId(texto) {
     .replace(/\s+/g, "-");
 }
 
+function torneoFinalizado() {
+  return partidos.length > 0 && partidos.every(p =>
+    (p.estado || "").toLowerCase().includes("final")
+  );
+}
+
+function verificarGanadores() {
+  if (!torneoFinalizado()) return;
+
+  const ranking = participantes
+    .map(p => ({ ...p, resumen: resumenPersona(p) }))
+    .sort((a, b) => b.resumen.puntos - a.resumen.puntos);
+
+  const maxPuntos = ranking[0]?.resumen.puntos ?? 0;
+  const ganadores = ranking.filter(p => p.resumen.puntos === maxPuntos);
+
+  document.getElementById("winnerContent").innerHTML = `
+    <div class="winner-box">
+      <div class="winner-trophy">🏆</div>
+      <h1>${ganadores.length > 1 ? "¡Tenemos empate!" : "¡Tenemos Ganador!"}</h1>
+
+      <div class="winner-list">
+        ${ganadores.map(g => `<div class="winner-name">👑 ${g.nombre}</div>`).join("")}
+      </div>
+
+      <div class="winner-points">${maxPuntos} pts</div>
+
+      <p>
+        ${ganadores.length > 1
+      ? "Según las reglas, el premio será compartido entre los ganadores."
+      : "Felicitaciones por ganar la Polla Mundialista."}
+      </p>
+
+      <button class="btn-ver" onclick="cerrarModal('modalGanadores')">
+        Ver ranking
+      </button>
+    </div>
+  `;
+
+  abrirModal("modalGanadores");
+}
 function calcularApuesta(apuesta) {
   const partido = partidos.find(p => p.id === apuesta.partidoId);
+
+  if (apuesta.goles1 === null || apuesta.goles2 === null) {
+    return { ...apuesta, puntos: 0, estado: "Sin apuesta" };
+  }
 
   if (!partido || partido.real1 === null || partido.real2 === null) {
     return { ...apuesta, puntos: 0, estado: "Pendiente" };
@@ -195,7 +329,7 @@ function renderPartidos() {
     return `
       <article class="match-card">
         <div class="match-head">
-          <span>${p.fecha}</span>
+          <span>Fecha ${p.jornada} · ${p.fecha}</span>
           <span>${p.hora}</span>
         </div>
 
@@ -231,7 +365,22 @@ function getStatusText(estado) {
   return "PRÓXIMO";
 }
 
+function renderHeadRanking() {
+  const head = document.getElementById("tablaHeadRanking");
+  if (!head) return;
+
+  head.innerHTML = `
+    <th>Pos.</th>
+    <th>Participante</th>
+    <th>Puntos</th>
+    ${partidos.map((p, index) => `<th>P${index + 1}</th>`).join("")}
+    <th>Detalle</th>
+  `;
+}
+
 function renderParticipantes() {
+  renderHeadRanking();
+
   const buscar = document.getElementById("buscar").value.toLowerCase();
 
   const ordenados = participantes
@@ -250,31 +399,31 @@ function renderParticipantes() {
         : a.estado === "Ganador + gol" ? "parcial"
           : a.estado === "Resultado" ? "resultado"
             : a.estado === "Pendiente" ? "pendiente"
-              : "fallado";
+              : a.estado === "Sin apuesta" ? "pendiente"
+                : "fallado";
 
-     return `
-      <td class="td-partido">
-        <span class="mini-point ${clase} ${esVivo ? "mini-live" : ""}">
-          ${a.estado === "Pendiente" ? "-" : a.puntos}
-        </span>
-        <small class="apuesta-mini">${a.goles1} - ${a.goles2}</small>
-      </td>
-    `;
+      const apuestaTexto =
+        a.goles1 === null || a.goles2 === null
+          ? "Sin apuesta"
+          : `${a.goles1} - ${a.goles2}`;
+
+      return `
+        <td class="td-partido">
+          <span class="mini-point ${clase} ${esVivo ? "mini-live" : ""}">
+            ${a.estado === "Pendiente" || a.estado === "Sin apuesta" ? "-" : a.puntos}
+          </span>
+          <small class="apuesta-mini">${apuestaTexto}</small>
+        </td>
+      `;
     }).join("");
 
     return `
       <tr>
-        <td data-label="Pos." class="pos">#${index + 1}</td>
-
-        <td data-label="Participante">
-          <b>${p.nombre}</b>
-        </td>
-
-        <td data-label="Puntos" class="puntos">${p.resumen.puntos}</td>
-
+        <td class="pos">#${index + 1}</td>
+        <td><b>${p.nombre}</b></td>
+        <td class="puntos">${p.resumen.puntos}</td>
         ${puntosPorPartido}
-
-        <td data-label="Detalle">
+        <td>
           <button class="btn-ver" onclick="verDetalle('${p.id}')">Ver</button>
         </td>
       </tr>
@@ -285,8 +434,6 @@ function renderParticipantes() {
 }
 
 function pintarKpis(lista) {
-  const totalPuntos = lista.reduce((s, p) => s + p.resumen.puntos, 0);
-
   document.getElementById("kpiParticipantes").textContent = lista.length;
   document.getElementById("kpiPuntajeMaximo").textContent =
     lista.length ? `${lista[0].resumen.puntos} pts` : "-";
@@ -314,7 +461,12 @@ function verDetalle(id) {
       : a.estado === "Ganador + gol" ? "parcial"
         : a.estado === "Resultado" ? "resultado"
           : a.estado === "Pendiente" ? "pendiente"
-            : "fallado";
+            : a.estado === "Sin apuesta" ? "pendiente"
+              : "fallado";
+
+    const apuesta = a.goles1 === null || a.goles2 === null
+      ? "Sin apuesta"
+      : `${a.goles1} - ${a.goles2}`;
 
     const real = p.real1 === null || p.real2 === null
       ? "Pendiente"
@@ -326,7 +478,7 @@ function verDetalle(id) {
         <td>${p.fecha}</td>
         <td>${p.hora}</td>
         <td><b>${p.equipo1}</b> vs <b>${p.equipo2}</b></td>
-        <td>${a.goles1} - ${a.goles2}</td>
+        <td>${apuesta}</td>
         <td>${real}</td>
         <td><span class="chip ${clase}">${a.estado}</span></td>
         <td class="puntos">${a.puntos}</td>
