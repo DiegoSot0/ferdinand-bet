@@ -7,9 +7,7 @@ let jornadaSeleccionada = "2";
 async function leerCSV(url) {
   const sep = url.includes("?") ? "&" : "?";
   const res = await fetch(url + sep + "v=" + Date.now());
-
   if (!res.ok) throw new Error("No se pudo leer CSV");
-
   const texto = await res.text();
   return csvToObjects(texto);
 }
@@ -20,9 +18,7 @@ function csvToObjects(csv) {
 
   return filas.map(fila => {
     const obj = {};
-    headers.forEach((h, i) => {
-      obj[h] = (fila[i] ?? "").trim();
-    });
+    headers.forEach((h, i) => obj[h] = (fila[i] ?? "").trim());
     return obj;
   });
 }
@@ -72,13 +68,10 @@ async function cargarSheets(manual = false) {
           const valL = filaApuesta?.[`P${partido.id}_L`];
           const valV = filaApuesta?.[`P${partido.id}_V`];
 
-          const l = valL === "" || valL === undefined ? null : Number(valL);
-          const v = valV === "" || valV === undefined ? null : Number(valV);
-
           return {
             partidoId: partido.id,
-            goles1: l,
-            goles2: v
+            goles1: valL === "" || valL === undefined ? null : Number(valL),
+            goles2: valV === "" || valV === undefined ? null : Number(valV)
           };
         })
       };
@@ -99,7 +92,6 @@ async function cargarSheets(manual = false) {
     if (manual && btn) {
       btn.disabled = false;
       btn.innerHTML = `<i class="bi bi-check-circle-fill me-2"></i>Actualizado`;
-
       setTimeout(() => {
         btn.innerHTML = `<i class="bi bi-arrow-clockwise me-1"></i>Actualizar Sheets`;
       }, 1500);
@@ -111,7 +103,6 @@ async function cargarSheets(manual = false) {
     if (manual && btn) {
       btn.disabled = false;
       btn.innerHTML = `<i class="bi bi-exclamation-circle me-2"></i>Error`;
-
       setTimeout(() => {
         btn.innerHTML = `<i class="bi bi-arrow-clockwise me-1"></i>Actualizar Sheets`;
       }, 2000);
@@ -145,24 +136,28 @@ function aplicarFiltroJornada() {
     ? [...partidosTodos]
     : partidosTodos.filter(p => p.jornada === jornadaSeleccionada);
 
-  participantes = participantesBase.map(p => ({
-    id: p.id,
-    nombre: p.nombre,
-    apuestas: partidos.map(partido => {
-      const apuesta = p.apuestasTodas.find(a => a.partidoId === partido.id);
+  participantes = participantesBase
+    .map(p => ({
+      id: p.id,
+      nombre: p.nombre,
+      apuestas: partidos.map(partido => {
+        const apuesta = p.apuestasTodas.find(a => a.partidoId === partido.id);
 
-      return calcularApuesta({
-        partidoId: partido.id,
-        goles1: apuesta?.goles1 ?? null,
-        goles2: apuesta?.goles2 ?? null
-      });
-    })
-  }));
+        return calcularApuesta({
+          partidoId: partido.id,
+          goles1: apuesta?.goles1 ?? null,
+          goles2: apuesta?.goles2 ?? null
+        });
+      })
+    }))
+    .filter(p => {
+      if (jornadaSeleccionada === "general") return true;
+      return p.apuestas.some(a => a.goles1 !== null && a.goles2 !== null);
+    });
 }
 
 function cambiarJornada() {
   jornadaSeleccionada = document.getElementById("selectJornada").value;
-
   aplicarFiltroJornada();
   renderPartidos();
   renderParticipantes();
@@ -171,11 +166,144 @@ function cambiarJornada() {
   verificarGanadores();
 }
 
-function renderLiveInfo() {
-  const live = partidos.find(p =>
-    (p.estado || "").toLowerCase().includes("vivo")
-  );
+function obtenerRankingActual() {
+  return participantes
+    .map(p => ({ ...p, resumen: resumenPersona(p) }))
+    .sort((a, b) => b.resumen.puntos - a.resumen.puntos);
+}
 
+function generarHTMLReporteParticipantes() {
+  const ranking = obtenerRankingActual();
+
+  const titulo = jornadaSeleccionada === "general"
+    ? "Ranking General"
+    : `Ranking Fecha ${jornadaSeleccionada}`;
+
+  return `
+    <div id="reporteExportable">
+      ${ranking.map((p, index) => `
+        <div class="reporte-persona">
+          <div class="reporte-header">
+            <h1>${titulo}</h1>
+            <p>Ferdinand Bet - Polla Mundialista</p>
+          </div>
+
+          <h2>#${index + 1} ${p.nombre} - ${p.resumen.puntos} pts</h2>
+
+          <table>
+            <thead>
+              <tr>
+                <th>N°</th>
+                <th>Partido</th>
+                <th>Apuesta</th>
+                <th>Real</th>
+                <th>Estado</th>
+                <th>Puntos</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${p.apuestas.map((a, i) => {
+                const partido = partidos.find(x => x.id === a.partidoId);
+
+                const apuesta = a.goles1 === null || a.goles2 === null
+                  ? "Sin apuesta"
+                  : `${a.goles1} - ${a.goles2}`;
+
+                const real = partido.real1 === null || partido.real2 === null
+                  ? "Pendiente"
+                  : `${partido.real1} - ${partido.real2}`;
+
+                return `
+                  <tr>
+                    <td>${i + 1}</td>
+                    <td>${partido.equipo1} vs ${partido.equipo2}</td>
+                    <td>${apuesta}</td>
+                    <td>${real}</td>
+                    <td>${a.estado}</td>
+                    <td>${a.puntos}</td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+async function descargarPDFParticipantes() {
+  const contenedor = document.createElement("div");
+  contenedor.innerHTML = generarHTMLReporteParticipantes();
+
+  contenedor.style.position = "fixed";
+  contenedor.style.left = "-9999px";
+  contenedor.style.top = "0";
+
+  document.body.appendChild(contenedor);
+
+  const reporte = contenedor.querySelector("#reporteExportable");
+  const bloques = reporte.querySelectorAll(".reporte-persona");
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  const pageWidth = 210;
+  const margin = 10;
+  const imgWidth = pageWidth - margin * 2;
+
+  for (let i = 0; i < bloques.length; i++) {
+    if (i > 0) pdf.addPage();
+
+    const canvas = await html2canvas(bloques[i], {
+      scale: 2,
+      backgroundColor: "#ffffff"
+    });
+
+    const imgData = canvas.toDataURL("image/png");
+    const imgHeight = canvas.height * imgWidth / canvas.width;
+
+    pdf.addImage(imgData, "PNG", margin, margin, imgWidth, imgHeight);
+  }
+
+  const nombre = jornadaSeleccionada === "general"
+    ? "ranking-general.pdf"
+    : `ranking-fecha-${jornadaSeleccionada}.pdf`;
+
+  pdf.save(nombre);
+  contenedor.remove();
+}
+
+async function descargarImagenParticipantes() {
+  const contenedor = document.createElement("div");
+  contenedor.innerHTML = generarHTMLReporteParticipantes();
+
+  contenedor.style.position = "fixed";
+  contenedor.style.left = "-9999px";
+  contenedor.style.top = "0";
+
+  document.body.appendChild(contenedor);
+
+  const reporte = contenedor.querySelector("#reporteExportable");
+
+  const canvas = await html2canvas(reporte, {
+    scale: 2,
+    backgroundColor: "#ffffff"
+  });
+
+  const link = document.createElement("a");
+  link.download = jornadaSeleccionada === "general"
+    ? "ranking-general.png"
+    : `ranking-fecha-${jornadaSeleccionada}.png`;
+
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+
+  contenedor.remove();
+}
+
+function renderLiveInfo() {
+  const live = partidos.find(p => (p.estado || "").toLowerCase().includes("vivo"));
   const contenedor = document.getElementById("liveMatchInfo");
 
   if (!live) {
@@ -221,10 +349,7 @@ function torneoFinalizado() {
 function verificarGanadores() {
   if (!torneoFinalizado()) return;
 
-  const ranking = participantes
-    .map(p => ({ ...p, resumen: resumenPersona(p) }))
-    .sort((a, b) => b.resumen.puntos - a.resumen.puntos);
-
+  const ranking = obtenerRankingActual();
   const maxPuntos = ranking[0]?.resumen.puntos ?? 0;
   const ganadores = ranking.filter(p => p.resumen.puntos === maxPuntos);
 
@@ -241,8 +366,8 @@ function verificarGanadores() {
 
       <p>
         ${ganadores.length > 1
-      ? "Según las reglas, el premio será compartido entre los ganadores."
-      : "Felicitaciones por ganar la Polla Mundialista."}
+          ? "Según las reglas, el premio será compartido entre los ganadores."
+          : "Felicitaciones por ganar la Polla Mundialista."}
       </p>
 
       <button class="btn-ver" onclick="cerrarModal('modalGanadores')">
@@ -253,6 +378,7 @@ function verificarGanadores() {
 
   abrirModal("modalGanadores");
 }
+
 function calcularApuesta(apuesta) {
   const partido = partidos.find(p => p.id === apuesta.partidoId);
 
@@ -306,14 +432,7 @@ function resumenPersona(persona) {
   const resultados = persona.apuestas.filter(a => a.estado === "Resultado").length;
   const fallados = persona.apuestas.filter(a => a.estado === "Fallado").length;
 
-  return {
-    partidos: persona.apuestas.length,
-    puntos,
-    exactos,
-    parciales,
-    resultados,
-    fallados
-  };
+  return { partidos: persona.apuestas.length, puntos, exactos, parciales, resultados, fallados };
 }
 
 function renderPartidos() {
@@ -349,19 +468,15 @@ function renderPartidos() {
 
 function getStatusClass(estado) {
   const value = (estado || "").toLowerCase();
-
   if (value.includes("vivo")) return "status-live";
   if (value.includes("final")) return "status-final";
-
   return "status-pending";
 }
 
 function getStatusText(estado) {
   const value = (estado || "").toLowerCase();
-
   if (value.includes("vivo")) return "EN VIVO";
   if (value.includes("final")) return "FINAL";
-
   return "PRÓXIMO";
 }
 
@@ -397,10 +512,10 @@ function renderParticipantes() {
 
       const clase = a.estado === "Marcador exacto" ? "exacto"
         : a.estado === "Ganador + gol" ? "parcial"
-          : a.estado === "Resultado" ? "resultado"
-            : a.estado === "Pendiente" ? "pendiente"
-              : a.estado === "Sin apuesta" ? "pendiente"
-                : "fallado";
+        : a.estado === "Resultado" ? "resultado"
+        : a.estado === "Pendiente" ? "pendiente"
+        : a.estado === "Sin apuesta" ? "pendiente"
+        : "fallado";
 
       const apuestaTexto =
         a.goles1 === null || a.goles2 === null
@@ -459,10 +574,10 @@ function verDetalle(id) {
 
     const clase = a.estado === "Marcador exacto" ? "exacto"
       : a.estado === "Ganador + gol" ? "parcial"
-        : a.estado === "Resultado" ? "resultado"
-          : a.estado === "Pendiente" ? "pendiente"
-            : a.estado === "Sin apuesta" ? "pendiente"
-              : "fallado";
+      : a.estado === "Resultado" ? "resultado"
+      : a.estado === "Pendiente" ? "pendiente"
+      : a.estado === "Sin apuesta" ? "pendiente"
+      : "fallado";
 
     const apuesta = a.goles1 === null || a.goles2 === null
       ? "Sin apuesta"

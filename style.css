@@ -646,6 +646,63 @@ body {
   margin: 8px 0;
 }
 
+.export-actions {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0 16px;
+  flex-wrap: wrap;
+}
+
+.reporte-exportable {
+  width: 1100px;
+  padding: 28px;
+  background: white;
+  color: #063f35;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.reporte-exportable h1 {
+  font-size: 30px;
+  margin: 0 0 4px;
+}
+
+.reporte-exportable p {
+  margin: 0 0 20px;
+  color: #66736e;
+}
+
+.reporte-persona {
+  page-break-inside: avoid;
+  margin-bottom: 24px;
+  border: 1px solid #dbe6e1;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.reporte-persona h2 {
+  margin: 0;
+  padding: 12px 14px;
+  background: #063f35;
+  color: #fff;
+  font-size: 18px;
+}
+
+.reporte-persona table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.reporte-persona th,
+.reporte-persona td {
+  border-bottom: 1px solid #dbe6e1;
+  padding: 9px;
+  font-size: 13px;
+}
+
+.reporte-persona th {
+  background: #f3f7f5;
+}
+
 /* ANIMATIONS */
 
 @keyframes pulseDot {
@@ -762,4 +819,13 @@ body {
   .ranking-table {
     min-width: 780px;
   }
+}
+
+.reporte-header {
+  margin-bottom: 20px;
+}
+
+.reporte-persona {
+  break-inside: avoid;
+  page-break-inside: avoid;
 }
