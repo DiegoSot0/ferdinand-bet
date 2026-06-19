@@ -2,7 +2,7 @@ let participantes = [];
 let participantesBase = [];
 let partidos = [];
 let partidosTodos = [];
-let jornadaSeleccionada = "2";
+let jornadaSeleccionada = "3";
 
 async function leerCSV(url) {
   const sep = url.includes("?") ? "&" : "?";
