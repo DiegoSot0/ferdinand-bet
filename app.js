@@ -125,7 +125,7 @@ function renderSelectorJornadas() {
   `;
 
   if (jornadaSeleccionada !== "general" && !jornadas.includes(jornadaSeleccionada)) {
-    jornadaSeleccionada = jornadas.includes("2") ? "2" : "general";
+    jornadaSeleccionada = jornadas.includes("3") ? "3" : "general";
   }
 
   select.value = jornadaSeleccionada;
