@@ -203,17 +203,17 @@ function generarHTMLReporteParticipantes() {
             </thead>
             <tbody>
               ${p.apuestas.map((a, i) => {
-                const partido = partidos.find(x => x.id === a.partidoId);
+    const partido = partidos.find(x => x.id === a.partidoId);
 
-                const apuesta = a.goles1 === null || a.goles2 === null
-                  ? "Sin apuesta"
-                  : `${a.goles1} - ${a.goles2}`;
+    const apuesta = a.goles1 === null || a.goles2 === null
+      ? "Sin apuesta"
+      : `${a.goles1} - ${a.goles2}`;
 
-                const real = partido.real1 === null || partido.real2 === null
-                  ? "Pendiente"
-                  : `${partido.real1} - ${partido.real2}`;
+    const real = partido.real1 === null || partido.real2 === null
+      ? "Pendiente"
+      : `${partido.real1} - ${partido.real2}`;
 
-                return `
+    return `
                   <tr>
                     <td>${i + 1}</td>
                     <td>${partido.equipo1} vs ${partido.equipo2}</td>
@@ -223,7 +223,7 @@ function generarHTMLReporteParticipantes() {
                     <td>${a.puntos}</td>
                   </tr>
                 `;
-              }).join("")}
+  }).join("")}
             </tbody>
           </table>
         </div>
@@ -366,8 +366,8 @@ function verificarGanadores() {
 
       <p>
         ${ganadores.length > 1
-          ? "Según las reglas, el premio será compartido entre los ganadores."
-          : "Felicitaciones por ganar la Polla Mundialista."}
+      ? "Según las reglas, el premio será compartido entre los ganadores."
+      : "Felicitaciones por ganar la Polla Mundialista."}
       </p>
 
       <button class="btn-ver" onclick="cerrarModal('modalGanadores')">
@@ -488,7 +488,7 @@ function renderHeadRanking() {
     <th>Pos.</th>
     <th>Participante</th>
     <th>Puntos</th>
-    ${partidos.map((p, index) => `<th>P${index + 1}</th>`).join("")}
+    ${partidos.map(p => `<th>P${p.id}</th>`).join("")}
     <th>Detalle</th>
   `;
 }
@@ -512,10 +512,10 @@ function renderParticipantes() {
 
       const clase = a.estado === "Marcador exacto" ? "exacto"
         : a.estado === "Ganador + gol" ? "parcial"
-        : a.estado === "Resultado" ? "resultado"
-        : a.estado === "Pendiente" ? "pendiente"
-        : a.estado === "Sin apuesta" ? "pendiente"
-        : "fallado";
+          : a.estado === "Resultado" ? "resultado"
+            : a.estado === "Pendiente" ? "pendiente"
+              : a.estado === "Sin apuesta" ? "pendiente"
+                : "fallado";
 
       const apuestaTexto =
         a.goles1 === null || a.goles2 === null
@@ -574,10 +574,10 @@ function verDetalle(id) {
 
     const clase = a.estado === "Marcador exacto" ? "exacto"
       : a.estado === "Ganador + gol" ? "parcial"
-      : a.estado === "Resultado" ? "resultado"
-      : a.estado === "Pendiente" ? "pendiente"
-      : a.estado === "Sin apuesta" ? "pendiente"
-      : "fallado";
+        : a.estado === "Resultado" ? "resultado"
+          : a.estado === "Pendiente" ? "pendiente"
+            : a.estado === "Sin apuesta" ? "pendiente"
+              : "fallado";
 
     const apuesta = a.goles1 === null || a.goles2 === null
       ? "Sin apuesta"
